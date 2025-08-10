@@ -1,0 +1,79 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Itinerario Atene 14-20 Agosto - Mappa Interattiva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2H8fYkXk0vJb4gqfFf3w5x0b1p2Kk3f5b8g6v+0=" crossorigin=""/>
+  <style>html,body,#map { height: 100%; margin:0; padding:0; } .legend { background:white;padding:8px;border-radius:6px;}</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-o9N1j7k3fWQb0u6Y2yWqvFQb0p1s8m2z6t2n5x0b+eM=" crossorigin=""></script>
+<script>
+  var map = L.map('map').setView([37.9715, 23.7260], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: 'Map data © OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Points (lat, lon)
+  var hotel = {coords:[37.95775,23.728058], name:"Hotel (Neos Kosmos approx.)\\n32 Ντελακρουά"};
+  var acropolis = {coords:[37.97167,23.72611], name:"Acropoli"};
+  var acro_museum = {coords:[37.96846,23.728373], name:"Museo dell'Acropoli"};
+  var ancient_agora = {coords:[37.974911,23.721956], name:"Agorà antica"};
+  var hephaestus = {coords:[37.9756167,23.7213917], name:"Tempio di Efesto (Theseion)"};
+  var national_museum = {coords:[37.98917,23.73222], name:"Museo Archeologico Nazionale"};
+  var monastiraki = {coords:[37.97596,23.72794], name:"Monastiraki"};
+  var thisseio = {coords:[37.976755,23.72013], name:"Thissio / Tempio di Efesto area"};
+  var koukaki = {coords:[37.96250,23.72083], name:"Koukaki"};
+  var edem_beach = {coords:[37.9199,23.69901], name:"Edem Beach (Palaio Faliro)"};
+  var ancient_corinth = {coords:[37.90518,22.87830], name:"Antica Corinto (sito archeologico)"};
+  var acrocorinth = {coords:[37.89174,22.87548], name:"Acrocorinth (acropoli)"};
+  var archaeological_museum_corinth = {coords:[37.905183,22.878304], name:"Museo Archeologico di Corinto"};
+  var cathedral = {coords:[37.97526,23.73009], name:"Cattedrale Metropolitana di Atene (Mitropoli)"};
+  var lykavittos = {coords:[37.97778,23.74167], name:"Colle/Lycabettus (belvedere)"};
+
+  var allPoints = [hotel, acropolis, acro_museum, ancient_agora, hephaestus, monastiraki, thisseio, koukaki, edem_beach, national_museum, cathedral, lykavittos, ancient_corinth, acrocorinth, archaeological_museum_corinth];
+
+  // Add markers
+  allPoints.forEach(function(p){
+    L.marker(p.coords).addTo(map).bindPopup("<b>"+p.name+"</b><br/>Lat: "+p.coords[0].toFixed(6)+", Lon: "+p.coords[1].toFixed(6));
+  });
+
+  // Polylines per day with distinct colors
+  var day14 = L.polyline([hotel.coords, acropolis.coords, thisseio.coords, monastiraki.coords], {color:'#e41a1c'}).addTo(map).bindPopup("14 Agosto: Arrivo & Acropoli/Areopago/Plaka");
+  var day15 = L.polyline([hotel.coords, cathedral.coords, national_museum.coords, monastiraki.coords], {color:'#377eb8'}).addTo(map).bindPopup("15 Agosto: Cristianesimo primitivo & centro storico");
+  var day16 = L.polyline([hotel.coords, acropolis.coords, acro_museum.coords, ancient_agora.coords, hephaestus.coords, thisseio.coords], {color:'#4daf4a'}).addTo(map).bindPopup("16 Agosto: Classici di Atene");
+  var day17 = L.polyline([hotel.coords, ancient_corinth.coords, archaeological_museum_corinth.coords, acrocorinth.coords, hotel.coords], {color:'#984ea3'}).addTo(map).bindPopup("17 Agosto: Gita a Corinto (andata/visita/Acrocorinth/ritorno)");
+  var day18 = L.polyline([hotel.coords, edem_beach.coords, koukaki.coords, hotel.coords], {color:'#ff7f00'}).addTo(map).bindPopup("18 Agosto: Relax e mare (Edem Beach) + Koukaki");
+  var day19 = L.polyline([hotel.coords, national_museum.coords, cathedral.coords, lykavittos.coords, hotel.coords], {color:'#ffff33'}).addTo(map).bindPopup("19 Agosto: Musei, Exarchia, Mitropoli e Licabetto");
+  var day20 = L.polyline([hotel.coords], {color:'#a65628'}).addTo(map).addTo(map).bindPopup("20 Agosto: Mattinata libera");
+
+  // Legend
+  var legend = L.control({position:'bottomright'});
+  legend.onAdd = function (map) {
+      var div = L.DomUtil.create('div', 'legend');
+      div.innerHTML += '<b>Legenda (per giorno)</b><br/>';
+      div.innerHTML += '<span style="background:#e41a1c;width:12px;display:inline-block;height:12px;margin-right:6px"></span>14 Ago - Acropoli<br/>';
+      div.innerHTML += '<span style="background:#377eb8;width:12px;display:inline-block;height:12px;margin-right:6px"></span>15 Ago - Cristianesimo storico<br/>';
+      div.innerHTML += '<span style="background:#4daf4a;width:12px;display:inline-block;height:12px;margin-right:6px"></span>16 Ago - Classici<br/>';
+      div.innerHTML += '<span style="background:#984ea3;width:12px;display:inline-block;height:12px;margin-right:6px"></span>17 Ago - Corinto<br/>';
+      div.innerHTML += '<span style="background:#ff7f00;width:12px;display:inline-block;height:12px;margin-right:6px"></span>18 Ago - Mare & Koukaki<br/>';
+      div.innerHTML += '<span style="background:#ffff33;width:12px;display:inline-block;height:12px;margin-right:6px"></span>19 Ago - Musei & Licabetto<br/>';
+      div.innerHTML += '<span style="background:#a65628;width:12px;display:inline-block;height:12px;margin-right:6px"></span>20 Ago - Libero<br/>';
+      return div;
+  };
+  legend.addTo(map);
+
+  // Fit map to show all points
+  var group = new L.featureGroup(allPoints.map(p=>L.marker(p.coords)));
+  map.fitBounds(group.getBounds().pad(0.2));
+
+</script>
+</body>
+</html>
